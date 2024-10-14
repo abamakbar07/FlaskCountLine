@@ -1,15 +1,10 @@
-# Flask Project
+# Flask CountLine XLSB Project
 
-A brief description of your project goes here. Explain what the project does and its key features.
+I developed this application to automate productivity reporting based on XLSB report files from each department.
 
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
-- [Features](#features)
-- [API Documentation](#api-documentation) (optional)
-- [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Installation
 
@@ -21,19 +16,29 @@ Make sure you have the following installed:
 ### Setup
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/your-flask-project.git
-   ``` 
+    ```bash
+    git clone https://github.com/abamakbar07/FlaskCountLine.git
+    ``` 
 2. Navigate to the project directory:
-bash
-Copy code
-cd your-flask-project
-Create a virtual environment (optional but recommended):
-bash
-Copy code
-python -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-Install the required dependencies:
-bash
-Copy code
-pip install -r requirements.txt
+    ```bash
+    cd your-flask-project
+    ```
+3. Create a virtual environment (optional but recommended):
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    ```
+4. Install the required dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+### Setup
+
+1. Run the Flask development server:
+    ```bash
+    python app.py
+    ``` 
+2. Access the app at http://127.0.0.1:5000/ or, access the app at http://<your-computer-ip>:5000/ on any device connected to the same network.
+
+
