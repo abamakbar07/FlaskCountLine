@@ -91,7 +91,7 @@ def process_files(first_file, second_file):
         row_difference = abs(second_file_rows - first_file_rows)
         final_result = first_file_pending_count + second_file_pending_count + row_difference
 
-    return f"Processed {first_file} and {second_file} result is {final_result}"
+    return f"{final_result} Line"
 
 @app.route("/logs")
 def get_logs():
@@ -105,4 +105,4 @@ def get_logs():
 if __name__ == "__main__":
     if not os.path.exists("uploads"):
         os.makedirs("uploads")
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
