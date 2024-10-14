@@ -7,24 +7,24 @@ The application is designed to automate the process of generating productivity r
 ## Functionality:
 
 ### Data Input
-    It takes XLSB report files from various departments as input.
+It takes XLSB report files from various departments as input.
 
 ### Automation
-    The application processes these files to extract relevant data.
+The application processes these files to extract relevant data.
 
 ### Report Generation
-    It compiles the extracted data into comprehensive productivity reports.
+It compiles the extracted data into comprehensive productivity reports.
 
 ## Functionality:
 
 ### Efficiency
-    Reduces the time and effort required to manually compile reports.
+Reduces the time and effort required to manually compile reports.
 
 ### Accuracy
-    Minimizes human errors in data processing.
+Minimizes human errors in data processing.
 
 ### Consistency
-    Ensures uniformity in the format and content of reports across departments.
+Ensures uniformity in the format and content of reports across departments.
 
 ## Prerequisites
 Make sure you have the following installed:
