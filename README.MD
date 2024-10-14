@@ -21,7 +21,7 @@ Make sure you have the following installed:
     ``` 
 2. Navigate to the project directory:
     ```bash
-    cd your-flask-project
+    cd FlaskCountLine
     ```
 3. Create a virtual environment (optional but recommended):
     ```bash
