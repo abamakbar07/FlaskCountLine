@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head><title>Select Files</title></head>
+<body>
+  <h1>Select Two .xlsb Files to Process</h1>
+  <form method="POST">
+    <label for="first_file">First file:</label>
+    <select name="first_file" required>
+      <option value="">--Select first file--</option>
+      {% for file in xlsb_files %}
+        <option value="{{ file }}">{{ file }}</option>
+      {% endfor %}
+    </select>
+    <br><br>
+
+    <label for="second_file">Second file:</label>
+    <select name="second_file" required>
+      <option value="">--Select second file--</option>
+      {% for file in xlsb_files %}
+        <option value="{{ file }}">{{ file }}</option>
+      {% endfor %}
+    </select>
+    <br><br>
+
+    <button type="submit">Process Files</button>
+  </form>
+</body>
+</html>
