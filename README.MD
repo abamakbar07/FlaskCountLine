@@ -1,14 +1,32 @@
 # Flask CountLine XLSB Project
 
-I developed this application to automate productivity reporting based on XLSB report files from each department.
+## Purpose
 
-## Table of Contents
-- [Installation](#installation)
-- [Usage](#usage)
+The application is designed to automate the process of generating productivity reports.
 
-## Installation
+## Functionality:
 
-### Prerequisites
+### Data Input
+    It takes XLSB report files from various departments as input.
+
+### Automation
+    The application processes these files to extract relevant data.
+
+### Report Generation
+    It compiles the extracted data into comprehensive productivity reports.
+
+## Functionality:
+
+### Efficiency
+    Reduces the time and effort required to manually compile reports.
+
+### Accuracy
+    Minimizes human errors in data processing.
+
+### Consistency
+    Ensures uniformity in the format and content of reports across departments.
+
+## Prerequisites
 Make sure you have the following installed:
 - [Python 3.x](https://www.python.org/)
 - [pip](https://pip.pypa.io/en/stable/)
