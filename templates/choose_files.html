@@ -7,10 +7,14 @@
 
     <!-- Include Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Include Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
     <style>
         body {
             padding-top: 50px;
+            background-color: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         h1, h2 {
             color: #333;
@@ -20,21 +24,31 @@
             overflow-y: scroll;
             margin-bottom: 20px;
         }
-        #progress-bar {
-            margin-top: 20px;
-        }
-        #logs {
-            max-height: 300px;
-            overflow-y: auto;
-            background-color: #f9f9f9;
-            padding: 10px;
-            border: 1px solid #ddd;
-            margin-top: 20px;
-        }
         #result {
             margin-top: 20px;
             font-size: 18px;
             font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-copy {
+            margin-left: 10px;
+            background: none;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .btn-copy:hover {
+            color: #0056b3;
+        }
+        .result-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -51,6 +65,14 @@
                 {% endfor %}
             </ul>
         </div>
+
+        <h2>Upload a File:</h2>
+        <form id="uploadForm" class="mb-4" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="file" name="file" class="form-control-file" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Upload File</button>
+        </form>
 
         <h2>Choose Files for Processing:</h2>
         <form id="fileForm" class="mb-4">
@@ -74,15 +96,15 @@
                 </select>
             </div>
 
-            <!-- New Date and Subtitle inputs -->
+            <!-- New inputs for title and date -->
             <div class="form-group">
-                <label for="process_date">Process Date:</label>
-                <input type="date" name="process_date" class="form-control" required>
+                <label for="title">Title:</label>
+                <input type="text" name="title" class="form-control" placeholder="Enter a title" required>
             </div>
 
             <div class="form-group">
-                <label for="subtitle">Subtitle:</label>
-                <input type="text" name="subtitle" class="form-control" placeholder="Enter a subtitle" required>
+                <label for="date">Date:</label>
+                <input type="date" name="date" class="form-control" required>
             </div>
 
             <button type="submit" class="btn btn-success btn-block">Process Files</button>
@@ -90,13 +112,12 @@
 
         <div id="result" class="text-center"></div>
 
-        <!-- Progress Bar -->
-        <div id="progress-bar" class="progress">
-            <div id="progress" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        <h2>Processing Results:</h2>
+        <div id="results">
+            {% for result in results %}
+                <div class="result-item">{{ result }}</div>
+            {% endfor %}
         </div>
-
-        <h2>Processing Logs:</h2>
-        <div id="logs"></div>
     </div>
 
     <!-- Include Bootstrap JS and dependencies -->
@@ -109,9 +130,7 @@
             event.preventDefault();
             const formData = new FormData(this);
 
-            // Reset progress and logs
-            document.getElementById("progress").style.width = "0%";
-            document.getElementById("logs").innerHTML = '';
+            // Reset result
             document.getElementById("result").innerHTML = 'Processing...';
 
             // AJAX request to submit the form data
@@ -124,49 +143,32 @@
                 if (data.error) {
                     document.getElementById("result").innerHTML = `<span class="text-danger">${data.error}</span>`;
                 } else {
-                    // Include date and subtitle in the result
-                    const processDate = formData.get("process_date");
-                    const subtitle = formData.get("subtitle");
+                    const title = formData.get("title");
+                    const date = formData.get("date");
                     const finalResult = data.result;
-                    const resultString = `${processDate} - ${subtitle}: ${finalResult}`;
-
-                    document.getElementById("result").innerHTML = `<span class="text-success">${resultString}</span>`;
+                    const combinedResult = `${date} - ${title}: ${finalResult}`;
+                    const resultElement = document.getElementById("result");
+                    resultElement.innerHTML = `
+                        <span class="text-success copy-text">${combinedResult}</span>
+                        <button class="btn-copy" onclick="copyToClipboard()"><i class="fas fa-copy"></i></button>
+                    `;
                 }
             })
             .catch(error => {
                 document.getElementById("result").innerHTML = `<span class="text-danger">Error processing files: ${error}</span>`;
             });
-
-            // Simulate loading progress
-            let progress = 0;
-            const interval = setInterval(() => {
-                if (progress < 100) {
-                    progress += 10;
-                    document.getElementById("progress").style.width = progress + "%";
-                } else {
-                    clearInterval(interval);
-                }
-            }, 500);
         });
 
-        // Function to fetch logs and update UI
-        function fetchLogsAndProgress() {
-            fetch('/logs')
-                .then(response => response.json())
-                .then(data => {
-                    // Update logs
-                    const logsElement = document.getElementById('logs');
-                    logsElement.innerHTML = '';
-                    data.logs.forEach(log => {
-                        const logEntry = document.createElement('div');
-                        logEntry.textContent = log;
-                        logsElement.appendChild(logEntry);
-                    });
-                });
+        function copyToClipboard() {
+            const copyText = document.querySelector(".copy-text");
+            const textArea = document.createElement("textarea");
+            textArea.value = copyText.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+            alert("Result copied to clipboard!");
         }
-
-        // Poll logs every 2 seconds
-        setInterval(fetchLogsAndProgress, 2000);
     </script>
 
 </body>

@@ -50,24 +50,41 @@ def get_pending_count_and_rows(file_name):
 @app.route("/", methods=["GET", "POST"])
 def choose_files():
     upload_folder = os.path.join(os.getcwd(), "uploads")
-    xlsb_files = [file for file in os.listdir(upload_folder) if file.endswith('.xlsb')]
+    if not os.path.exists(upload_folder):
+        os.makedirs(upload_folder)
 
     if request.method == "POST":
-        first_file = request.form.get("first_file")
-        second_file = request.form.get("second_file")
+        # Check if the form is for file upload or file processing
+        if 'file' in request.files:
+            file = request.files['file']
+            if file.filename == '':
+                return jsonify({"error": "No selected file"})
+            
+            if file and file.filename.endswith('.xlsb'):
+                file.save(os.path.join(upload_folder, file.filename))
+                return jsonify({"success": True, "message": "File uploaded successfully"})
+            else:
+                return jsonify({"error": "Invalid file type. Only .xlsb files are allowed."})
+        else:
+            # Handle file processing
+            first_file = request.form.get("first_file")
+            second_file = request.form.get("second_file")
+            if not (first_file and second_file):
+                return jsonify({"error": "Please select both files before submitting."})
 
-        if not (first_file and second_file):
-            return jsonify({"error": "Please select both files before submitting."})
+            # Process the files and return the result
+            first_file_path = os.path.join(upload_folder, first_file)
+            second_file_path = os.path.join(upload_folder, second_file)
 
-        # Process the files and return the result
-        first_file_path = os.path.join(upload_folder, first_file)
-        second_file_path = os.path.join(upload_folder, second_file)
+            result = process_files(first_file_path, second_file_path)
+            return jsonify({"success": True, "result": result})
 
-        result = process_files(first_file_path, second_file_path)
-        return jsonify({"success": True, "result": result})
-
+    xlsb_files = [file for file in os.listdir(upload_folder) if file.endswith('.xlsb')]
     return render_template("choose_files.html", xlsb_files=xlsb_files)
 
+@app.route("/results")
+def get_results():
+    return jsonify(results)
 
 def process_files(first_file, second_file):
     upload_folder = os.path.join(os.getcwd(), "uploads")
